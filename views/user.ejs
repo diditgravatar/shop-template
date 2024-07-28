@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="items"></div>
+    <script>
+      const itemsContainer = document.getElementById("items");
+
+      fetch("/data")
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          updateHTML(data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
+      function updateHTML(data) {
+        if (Array.isArray(data)) {
+          itemsContainer.innerHTML = data.map(
+            (item) => `
+          <h3>${item.name}</h3>
+          <p>id Number : ${item.id}</p>
+          `
+          );
+        } else {
+          itemsContainer.innerHTML = `
+          <h3>${data.name}</h3>
+          <p>${data.id}</p>
+          `;
+        }
+      }
+    </script>
+  </body>
+</html>

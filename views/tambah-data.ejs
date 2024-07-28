@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+      <p id="response-text"></p>
+    </div>
+    <form id="data-form">
+      <input type="text" id="name" />
+      <input type="text" id="description" />
+      <button type="submit">Tambah Data</button>
+    </form>
+    <script>
+      const responseText = document.getElementById("response-text");
+      document
+        .getElementById("data-form")
+        .addEventListener("submit", (event) => {
+          event.preventDefault();
+
+          //
+          const name = document.getElementById("name").value;
+          const description = document.getElementById("description").value;
+
+          // masukan objek ke variable
+          const data = {
+            name: name,
+            description: description,
+          };
+
+          fetch("/add", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                responseText.textContent = "Data gagal di kirim";
+              } else {
+                return response.json(data);
+              }
+            })
+            .then((data) => {
+              responseText.textContent = "Data sukses di kirim";
+            })
+            .catch((e) => {
+              //
+              responseText.textContent = "Data gagal";
+            });
+        });
+    </script>
+  </body>
+</html>
